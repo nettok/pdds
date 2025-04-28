@@ -1,6 +1,6 @@
 use criterion::measurement::WallTime;
 use criterion::{BenchmarkGroup, BenchmarkId, Criterion, criterion_group, criterion_main};
-use opt01::sort::{bubble_sort, random_array, selection_sort};
+use lab01::sort::{bubble_sort, random_array, selection_sort};
 
 fn bench_sort(c: &mut Criterion) {
     let mut group = c.benchmark_group("Sorting");
