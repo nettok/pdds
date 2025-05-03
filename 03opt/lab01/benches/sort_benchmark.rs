@@ -1,10 +1,12 @@
 use criterion::measurement::WallTime;
 use criterion::{BenchmarkGroup, BenchmarkId, Criterion, criterion_group, criterion_main};
-use lab01::sort::{bubble_sort, random_array, selection_sort};
+use lab01::sort::{bubble_sort, random_array, selection_sort, insertion_sort, merge_sort, quicksort};
 
 fn bench_sort(c: &mut Criterion) {
     let mut group = c.benchmark_group("Sorting");
     group.sample_size(10);
+    bench_sort_functions_with_input_size::<10>(&mut group);
+    bench_sort_functions_with_input_size::<100>(&mut group);
     bench_sort_functions_with_input_size::<1_000>(&mut group);
     bench_sort_functions_with_input_size::<10_000>(&mut group);
     bench_sort_functions_with_input_size::<50_000>(&mut group);
@@ -30,6 +32,30 @@ fn bench_sort_functions_with_input_size<const N: usize>(group: &mut BenchmarkGro
         |b, _| {
             let mut arr_copy = arr.clone();
             b.iter(|| selection_sort(&mut arr_copy))
+        },
+    );
+    group.bench_with_input(
+        BenchmarkId::new("insertion_sort", &display_size),
+        &display_size,
+        |b, _| {
+            let mut arr_copy = arr.clone();
+            b.iter(|| insertion_sort(&mut arr_copy))
+        },
+    );
+    group.bench_with_input(
+        BenchmarkId::new("merge_sort", &display_size),
+        &display_size,
+        |b, _| {
+            let mut arr_copy = arr.clone();
+            b.iter(|| merge_sort(&mut arr_copy))
+        },
+    );
+    group.bench_with_input(
+        BenchmarkId::new("quicksort", &display_size),
+        &display_size,
+        |b, _| {
+            let mut arr_copy = arr.clone();
+            b.iter(|| quicksort(&mut arr_copy))
         },
     );
 }
