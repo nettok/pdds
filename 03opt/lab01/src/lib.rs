@@ -5,11 +5,11 @@ pub mod sort {
         let mut n = arr.len();
         let mut swapped = true;
     
-        while swapped {                     // n - 1
+        while swapped {                      // n - 1
             swapped = false;                    
             for i in 1..n {        // (n - 1) + (n - 2) + ... +  1 = (n^2 - n)/2
-                if arr[i - 1] > arr[i] {    // ... * c1
-                    arr.swap(i - 1, i);  // ... * c2 (swap occurs more often)
+                if arr[i - 1] > arr[i] {     // ... * c1
+                    arr.swap(i - 1, i);   // ... * c2 (swap occurs more often)
                     swapped = true;
                 }
             }
@@ -22,12 +22,12 @@ pub mod sort {
         for i in 0..len {          // n
             let mut min_idx = i;
             for j in i + 1..len {  // (n - 1) + (n - 2) + ... +  1 = (n^2 - n)/2
-                if arr[j] < arr[min_idx] {  // ... * c1
+                if arr[j] < arr[min_idx] {   // ... * c1
                     min_idx = j;
                 }
             }
-            if i != min_idx {               // ... * c2
-                arr.swap(i, min_idx);       // ... * c3 (swap occurs less often)
+            if i != min_idx {                // ... * c2
+                arr.swap(i, min_idx);        // ... * c3 (swap occurs less often)
             }
         }
     }
@@ -76,25 +76,25 @@ pub mod sort {
         result
     }
 
-    pub fn random_array<const N: usize>() -> [i32; N] {
-        let mut rng = rand::rng();
-        let mut arr = [0; N];
-
-        for elem in arr.iter_mut() {
-            *elem = rng.random();
-        }
-
-        arr
-    }
-
     pub fn quicksort<T: PartialOrd>(arr: &mut [T]) {
-        if arr.len() <= 1 {
-            return;
-        }
+        let mut stack = vec![(0, arr.len())];
 
-        let pivot_index = quicksort_partition(arr);
-        quicksort(&mut arr[..pivot_index]);
-        quicksort(&mut arr[pivot_index + 1..]);
+        while let Some((start, end)) = stack.pop() {
+            if end - start <= 1 {
+                continue;
+            }
+
+            let pivot_index = quicksort_partition(&mut arr[start..end]) + start;
+
+            // Push larger partition first to limit stack depth
+            if pivot_index - start > end - (pivot_index + 1) {
+                stack.push((start, pivot_index));
+                stack.push((pivot_index + 1, end));
+            } else {
+                stack.push((pivot_index + 1, end));
+                stack.push((start, pivot_index));
+            }
+        }
     }
 
     fn quicksort_partition<T: PartialOrd>(arr: &mut [T]) -> usize {
@@ -112,43 +112,55 @@ pub mod sort {
         i
     }
 
+    pub fn random_vec<const N: usize>() -> Vec<i32> {
+        let mut rng = rand::rng();
+        let mut arr = Vec::with_capacity(N);
+        arr.resize(N, 0);
+
+        for elem in arr.iter_mut() {
+            *elem = rng.random();
+        }
+
+        arr
+    }
+
     #[cfg(test)]
     mod tests {
         use super::*;
 
         #[test]
         fn bubble_sort_random() -> Result<(), String> {
-            test_sort_algorithm(bubble_sort, random_array::<10000>())
+            test_sort_algorithm(bubble_sort, &mut random_vec::<10000>())
         }
 
         #[test]
         fn selection_sort_random() -> Result<(), String> {
-            test_sort_algorithm(selection_sort, random_array::<10000>())
+            test_sort_algorithm(selection_sort, &mut random_vec::<10000>())
         }
 
         #[test]
         fn insertion_sort_random() -> Result<(), String> {
-            test_sort_algorithm(insertion_sort, random_array::<10000>())
+            test_sort_algorithm(insertion_sort, &mut random_vec::<10000>())
         }
 
         #[test]
         fn merge_sort_random() -> Result<(), String> {
-            test_sort_algorithm(merge_sort, random_array::<10000>())
+            test_sort_algorithm(merge_sort, &mut random_vec::<10_000_000>())
         }
 
         #[test]
         fn quicksort_random() -> Result<(), String> {
-            test_sort_algorithm(quicksort, random_array::<10000>())
+            test_sort_algorithm(quicksort, &mut random_vec::<10_000_000>())
         }
 
-        fn test_sort_algorithm<F, const N: usize>(
+        fn test_sort_algorithm<F>(
             sort_fn: F,
-            mut arr: [i32; N],
+            arr: &mut [i32],
         ) -> Result<(), String>
         where
             F: Fn(&mut [i32]),
         {
-            sort_fn(&mut arr);
+            sort_fn(arr);
 
             for i in 0..arr.len() - 1 {
                 if arr[i] > arr[i + 1] {
