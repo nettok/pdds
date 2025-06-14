@@ -1,4 +1,4 @@
-package org.nettok;
+package org.nettok.tests;
 
 import org.nettok.base.PlaywrightTestBase;
 import org.testng.annotations.Test;

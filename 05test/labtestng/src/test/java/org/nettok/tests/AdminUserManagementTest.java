@@ -1,7 +1,8 @@
-package org.nettok;
+package org.nettok.tests;
 
 import com.microsoft.playwright.Locator;
 import org.assertj.core.api.Assertions;
+import org.nettok.Urls;
 import org.nettok.base.PlaywrightTestBase;
 import org.nettok.pages.AdminUserManagementPage;
 import org.testng.annotations.Test;
@@ -15,6 +16,7 @@ public class AdminUserManagementTest extends PlaywrightTestBase {
         login();
         page.navigate(Urls.getAdminUserManagementUrl());
 
+        // When searching the "Admin" user, we should find 1 record
         final var adminUserManagementPage = new AdminUserManagementPage(page);
         adminUserManagementPage.getUsernameInput().fill("Admin");
         adminUserManagementPage.getSearchButton().click();
@@ -28,6 +30,7 @@ public class AdminUserManagementTest extends PlaywrightTestBase {
     public void resetSearchFormTest() {
         searchUserTest();
 
+        // After searching for a user, if we click the "Reset" button, the form input resets.
         final var adminUserManagementPage = new AdminUserManagementPage(page);
         adminUserManagementPage.getResetButton().click();
 
@@ -42,6 +45,7 @@ public class AdminUserManagementTest extends PlaywrightTestBase {
         login();
         page.navigate(Urls.getAdminUserManagementUrl());
 
+        // If we click the "Add" button, we are taken to the "saveSystemUser" page.
         final var adminUserManagementPage = new AdminUserManagementPage(page);
         adminUserManagementPage.getAddButton().click();
 

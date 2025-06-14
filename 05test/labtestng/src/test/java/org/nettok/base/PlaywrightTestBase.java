@@ -10,7 +10,7 @@ import org.nettok.pages.LoginPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class PlaywrightTestBase {
+public abstract class PlaywrightTestBase {
 
     private static final String USERNAME = "Admin";
     private static final String PASSWORD = "admin123";
@@ -52,7 +52,7 @@ public class PlaywrightTestBase {
     }
 
     protected void login() {
-        page.navigate(Urls.BASE_URL + "/auth/login");
+        page.navigate(Urls.getLoginUrl());
 
         final var loginPage = new LoginPage(page);
         loginPage.getUsernameInput().fill(USERNAME);

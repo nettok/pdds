@@ -1,7 +1,8 @@
-package org.nettok;
+package org.nettok.tests;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.AriaRole;
+import org.nettok.Urls;
 import org.nettok.base.PlaywrightTestBase;
 import org.testng.annotations.Test;
 
