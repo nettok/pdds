@@ -37,9 +37,50 @@ fn main() {
 }
 
 fn to_roman(number: i16) -> Result<String> {
-    if number == 1 {
+    if number == 0 {
+        Ok("".to_owned())
+    }
+    else if number == 1 {
         Ok("I".to_owned())
     } else {
         Err(anyhow!("Cannot represent {} as a roman number", number))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_basic_conversion() {
+        assert_eq!(to_roman(1).unwrap(), "I");
+        assert_eq!(to_roman(5).unwrap(), "V");
+        assert_eq!(to_roman(10).unwrap(), "X");
+        assert_eq!(to_roman(50).unwrap(), "L");
+        assert_eq!(to_roman(100).unwrap(), "C");
+        assert_eq!(to_roman(500).unwrap(), "D");
+        assert_eq!(to_roman(1000).unwrap(), "M");
+    }
+
+    #[test]
+    fn test_composite_numbers() {
+        assert_eq!(to_roman(3).unwrap(), "III");
+        assert_eq!(to_roman(4).unwrap(), "IV");
+        assert_eq!(to_roman(9).unwrap(), "IX");
+        assert_eq!(to_roman(58).unwrap(), "LVIII");
+        assert_eq!(to_roman(1994).unwrap(), "MCMXCIV");
+    }
+
+    #[test]
+    fn test_edge_cases() {
+        assert_eq!(to_roman(0).unwrap(), "");
+        assert_eq!(to_roman(3999).unwrap(), "MMMCMXCIX");
+    }
+
+    #[test]
+    fn test_invalid_numbers() {
+        assert!(to_roman(-1).is_err());
+        assert!(to_roman(4000).is_err());
+        assert!(to_roman(32767).is_err());
     }
 }
