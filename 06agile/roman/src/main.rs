@@ -1,6 +1,7 @@
 use anyhow::{Result, anyhow};
 use std::io;
 use std::io::Write;
+use std::ops::Add;
 
 fn main() {
     println!("Enter a number to convert it a roman numeral.  Enter 'q' to quit the program.");
@@ -53,9 +54,29 @@ fn to_roman(number: i16) -> Result<String> {
         Ok("D".to_owned())
     } else if number == 1000 {
         Ok("M".to_owned())
+    } else if number > 3999 {
+        roman_repr_error(number)
+    } else if number > 1000 {
+        Ok("M".to_owned() + &to_roman(number - 1000)?)
+    } else if number > 500 {
+        Ok("D".to_owned() + &to_roman(number - 500)?)
+    } else if number > 100 {
+        Ok("C".to_owned() + &to_roman(number - 100)?)
+    } else if number > 50 {
+        Ok("L".to_owned() + &to_roman(number - 50)?)
+    } else if number > 10 {
+        Ok("X".to_owned() + &to_roman(number - 10)?)
+    } else if number > 5 {
+        Ok("V".to_owned() + &to_roman(number - 5)?)
+    } else if number > 1 {
+        Ok("I".to_owned() + &to_roman(number - 1)?)
     } else {
-        Err(anyhow!("Cannot represent {} as a roman number", number))
+        roman_repr_error(number)
     }
+}
+
+fn roman_repr_error(number: i16) -> Result<String> {
+    Err(anyhow!("Cannot represent {} as a roman number", number))
 }
 
 #[cfg(test)]
