@@ -1,0 +1,8 @@
+[package]
+name = "roman"
+version = "0.1.0"
+authors = ["Ernesto Menéndez <pyalec@gmail.com>"]
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0"
