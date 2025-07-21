@@ -42,6 +42,18 @@ fn to_roman(number: i16) -> Result<String> {
     }
     else if number == 1 {
         Ok("I".to_owned())
+    } else if number == 5 {
+        Ok("V".to_owned())
+    } else if number == 10 {
+        Ok("X".to_owned())
+    } else if number == 50 {
+        Ok("L".to_owned())
+    } else if number == 100 {
+        Ok("C".to_owned())
+    } else if number == 500 {
+        Ok("D".to_owned())
+    } else if number == 1000 {
+        Ok("M".to_owned())
     } else {
         Err(anyhow!("Cannot represent {} as a roman number", number))
     }
