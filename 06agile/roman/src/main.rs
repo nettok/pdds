@@ -1,6 +1,6 @@
+use anyhow::{Result, anyhow};
 use std::io;
 use std::io::Write;
-use anyhow::{anyhow, Result};
 
 fn main() {
     println!("Enter a number to convert it a roman numeral.  Enter 'q' to quit the program.");
@@ -17,7 +17,7 @@ fn main() {
                 }
 
                 let number: i16 = match input.parse() {
-                    Ok(parsed) => { parsed },
+                    Ok(parsed) => parsed,
                     Err(_error) => {
                         println!("Error: Could not parse `{}` as an i16\n", input);
                         continue;
@@ -26,8 +26,8 @@ fn main() {
                 match to_roman(number) {
                     Ok(roman) => {
                         println!("{}", roman);
-                    },
-                    Err(error) => println!("Error: {}", error)
+                    }
+                    Err(error) => println!("Error: {}", error),
                 }
             }
             Err(error) => println!("Error: {}", error),
@@ -39,8 +39,7 @@ fn main() {
 fn to_roman(number: i16) -> Result<String> {
     if number == 0 {
         Ok("".to_owned())
-    }
-    else if number == 1 {
+    } else if number == 1 {
         Ok("I".to_owned())
     } else if number == 5 {
         Ok("V".to_owned())
