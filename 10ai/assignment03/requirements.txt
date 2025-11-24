@@ -1,0 +1,2 @@
+tensorflow==2.20.0
+scipy==1.16.3
